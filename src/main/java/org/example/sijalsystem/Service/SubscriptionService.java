@@ -42,15 +42,14 @@ public class SubscriptionService {
         boolean hasActiveSubscription = customer.getSubscriptionSet().stream()
                 .anyMatch(s -> s.getEndDate().isAfter(LocalDate.now()));
 
-        if (!hasPreviousRequest) {
-            return createSubscriptionAndPay(customer);
+        if (hasActiveSubscription) {
+            throw new APIException("You already have an active subscription");
         }
 
-        if (hasPreviousRequest && hasActiveSubscription) {
-            return createSubscriptionAndPay(customer);
+        if (hasPreviousRequest) {
+            throw new APIException("Cannot subscribe: previous request requires");
         }
-
-        throw new APIException("Cannot subscribe: no active subscription for previous request");
+        return createSubscriptionAndPay(customer);
     }
 
     private PaymentResult createSubscriptionAndPay(Customer customer) {
