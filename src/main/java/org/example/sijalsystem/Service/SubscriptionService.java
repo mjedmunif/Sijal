@@ -38,7 +38,7 @@ public class SubscriptionService {
             throw new APIException("Card not found, please enter your card first");
         }
 
-        boolean hasPreviousRequest = !customer.getRequestInterviewSet().isEmpty();
+
         boolean hasActiveSubscription = customer.getSubscriptionSet().stream()
                 .anyMatch(s -> s.getEndDate().isAfter(LocalDate.now()));
 
@@ -46,9 +46,7 @@ public class SubscriptionService {
             throw new APIException("You already have an active subscription");
         }
 
-        if (hasPreviousRequest) {
-            throw new APIException("Cannot subscribe: previous request requires");
-        }
+
         return createSubscriptionAndPay(customer);
     }
 
